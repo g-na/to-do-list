@@ -71,3 +71,35 @@ if (savedTodoList) {
     createToDo(savedTodoList[i]);
   }
 }
+
+const weatherSearch = function (position) {
+  fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${position.latitude}&lon=${position.longitude}&appid=f00e3f608ee18e70825f1d3366dc565e`
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .then((json) => {
+      console.log(json.name, json.weather[0].description);
+    })
+    .catch((err) => {
+      console.err(err);
+    });
+};
+
+const accessToGeo = function (position) {
+  const positionObj = {
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+  };
+
+  weatherSearch(positionObj);
+};
+
+const askForLocation = function () {
+  navigator.geolocation.getCurrentPosition(accessToGeo, (err) => {
+    console.log(err);
+  });
+};
+
+askForLocation();
